@@ -139,11 +139,8 @@ export default function Goals() {
 
   return (
     <div className="space-y-6 md:space-y-10 relative pb-10">
-      <motion.header 
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
+      <header 
+        className="flex flex-col md:flex-row md:items-end justify-between gap-6"
       >
         <div>
           <div className="flex items-center gap-3 mb-2">
@@ -153,27 +150,23 @@ export default function Goals() {
           <h1 className="text-3xl md:text-5xl font-black text-white mb-2 tracking-tight">Yirik Maqsadlar</h1>
           <p className="text-white/40 text-sm md:text-lg font-medium max-w-xl">Katta maqsadlarni kichik 5-kunlik qadamlarga bo'ling.</p>
         </div>
-        <motion.button 
-          whileTap={{ scale: 0.98 }}
+        <button 
           onClick={() => setIsModalOpen(true)} 
           className="glass-button w-full md:w-auto px-8 py-4 shadow-xl"
         >
           <PlusCircle size={20} /> Yangi Maqsad
-        </motion.button>
-      </motion.header>
+        </button>
+      </header>
 
-      <motion.div 
-        layout
+      <div 
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
         <AnimatePresence mode="popLayout">
           {goals.map((goal, idx) => {
             const daysLeft = getDaysRemaining(goal.deadline);
             return (
-              <motion.div 
+              <div 
                 key={goal.id} 
-                layout
-                whileHover={{ y: -4, scale: 1.01, transition: { duration: 0.2 } }}
                 onClick={() => {
                   setSelectedGoal(goal);
                   setSelectedCycle(null);
@@ -223,18 +216,17 @@ export default function Goals() {
                         {goal.fiveDayCycles?.length || 0} ta qadam
                       </span>
                    </div>
-                   <motion.div 
-                     whileHover={{ x: 3 }}
+                   <div 
                      className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20 shadow-inner group-hover:bg-blue-500 group-hover:text-white transition-all duration-300"
                    >
                      <ArrowRight size={18} />
-                   </motion.div>
+                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </AnimatePresence>
-      </motion.div>
+      </div>
 
       {/* Goal Creation Modal */}
       <AnimatePresence>
@@ -302,10 +294,7 @@ export default function Goals() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[1000] flex items-center justify-center bg-black overflow-hidden p-0"
           >
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 30 }}
+            <div 
               className="w-full h-full flex flex-col md:flex-row gap-0 overflow-hidden relative bg-black/95"
             >
                 {/* Mobile Header with X and Tabs */}
@@ -357,22 +346,18 @@ export default function Goals() {
                      <h3 className="font-black text-xl md:text-2xl tracking-tighter flex items-center gap-3">
                         <Flame size={24} className="text-orange-500" /> Bosqichlar
                      </h3>
-                     <motion.button 
-                       whileTap={{ scale: 0.95 }}
+                     <button 
                        onClick={() => setIsAddingCycle(true)} 
                        className="text-[10px] bg-blue-500 text-white px-6 py-3 rounded-2xl hover:bg-blue-600 transition-all flex items-center gap-2 font-black uppercase tracking-widest shadow-2xl"
                      >
                        <PlusCircle size={16}/> Yangi Bosqich
-                     </motion.button>
+                     </button>
                    </div>
                    
                    <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar pb-6 elastic-scroll">
                       {selectedGoal.fiveDayCycles?.map((cycle: any, cidx: number) => (
-                        <motion.div 
+                        <div 
                           key={cycle.id}
-                          initial={{ opacity: 0, y: 5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: cidx * 0.03, duration: 0.3 }}
                           onClick={() => { setSelectedCycle(cycle); setActiveTab('tasks'); }}
                           className={`p-5 rounded-[24px] border cursor-pointer transition-all ${selectedCycle?.id === cycle.id ? 'bg-blue-600/20 border-blue-500/50 shadow-[0_0_30px_rgba(59,130,246,0.15)] scale-[1.01]' : 'bg-white/5 border-white/5 hover:bg-white/[0.08] hover:border-white/10'}`}
                         >
@@ -389,15 +374,14 @@ export default function Goals() {
                            </div>
                            <div className="mt-4 flex items-center gap-3">
                              <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
-                                <motion.div 
-                                  initial={{ width: 0 }}
-                                  animate={{ width: `${(cycle.tasks?.filter((t:any) => t.isCompleted).length / (cycle.tasks?.length || 1)) * 100}%` }}
+                                <div 
+                                  style={{ width: `${(cycle.tasks?.filter((t:any) => t.isCompleted).length / (cycle.tasks?.length || 1)) * 100}%` }}
                                   className="h-full bg-blue-500 rounded-full" 
                                 />
                              </div>
                              <span className="text-[9px] text-white/40 font-black uppercase tracking-widest">{cycle.tasks?.length || 0} Vazifa</span>
                            </div>
-                        </motion.div>
+                        </div>
                       ))}
                       
                       {selectedGoal.fiveDayCycles?.length === 0 && !isAddingCycle && (
@@ -409,10 +393,7 @@ export default function Goals() {
                       
                     <AnimatePresence>
                       {isAddingCycle && (
-                        <motion.div 
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
+                        <div 
                           className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
                           onClick={() => setIsAddingCycle(false)}
                         >
@@ -421,7 +402,7 @@ export default function Goals() {
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.95, opacity: 0 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-[#0a0a0a] border border-white/10 p-6 md:p-10 rounded-[32px] w-full max-w-lg shadow-2xl relative"
+                            className="bg-[#0a0a0a] border border-white/10 p-5 md:p-10 rounded-[32px] w-full max-w-[94%] md:max-w-lg shadow-2xl relative overflow-hidden"
                           >
                              <form onSubmit={handleAddCycle} className="space-y-6">
                                <div className="flex justify-between items-center mb-2">
