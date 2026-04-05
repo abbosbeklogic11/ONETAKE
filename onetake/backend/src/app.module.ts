@@ -20,16 +20,21 @@ import { NotesModule } from './notes/notes.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST', 'localhost'),
-        port: configService.get<number>('DB_PORT', 5433),
-        username: configService.get<string>('DB_USERNAME', 'postgres'),
-        password: configService.get<string>('DB_PASSWORD', 'postgres'),
-        database: configService.get<string>('DB_DATABASE', 'onetake'),
-        entities: [User, Goal, Task, CoinTransaction, FiveDayCycle, Note],
-        synchronize: true,
-      }),
+      useFactory: (configService: ConfigService) => {
+        const url = configService.get<string>('DATABASE_URL');
+        return {
+          type: 'postgres',
+          url,
+          host: !url ? configService.get<string>('DB_HOST', 'localhost') : undefined,
+          port: !url ? configService.get<number>('DB_PORT', 5433) : undefined,
+          username: !url ? configService.get<string>('DB_USERNAME', 'postgres') : undefined,
+          password: !url ? configService.get<string>('DB_PASSWORD', 'postgres') : undefined,
+          database: !url ? configService.get<string>('DB_DATABASE', 'onetake') : undefined,
+          entities: [User, Goal, Task, CoinTransaction, FiveDayCycle, Note],
+          synchronize: true,
+          ssl: url ? { rejectUnauthorized: false } : false,
+        };
+      },
       inject: [ConfigService],
     }),
     ServeStaticModule.forRoot({
