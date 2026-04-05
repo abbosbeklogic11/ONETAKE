@@ -307,21 +307,21 @@ export default function Goals() {
             className="fixed inset-0 z-[1000] flex items-center justify-center bg-black overflow-hidden p-0"
           >
             <motion.div 
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.05 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               className="w-full h-full flex flex-col md:flex-row gap-0 overflow-hidden relative"
             >
                  <button 
                   onClick={() => { setSelectedGoal(null); setSelectedCycle(null); }} 
-                  className="absolute top-10 right-10 z-50 w-16 h-16 flex items-center justify-center bg-white/10 backdrop-blur-3xl border border-white/10 rounded-full text-white/50 hover:text-white hover:bg-white/20 transition-all shadow-3xl active:scale-90"
+                  className="absolute top-4 right-4 md:top-10 md:right-10 z-[1100] w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-white/10 backdrop-blur-3xl border border-white/10 rounded-full text-white/50 hover:text-white hover:bg-white/20 transition-all shadow-3xl active:scale-90"
                 >
-                  <X size={32} />
+                  <X size={24} className="md:w-8 md:h-8" />
                 </button>
 
                  {/* Panel 1: Cycles List */}
-                <div className="flex-1 h-full flex flex-col overflow-hidden relative border-r border-white/5 bg-white/[0.01] p-8 md:p-12">
+                <div className="flex-1 h-[50vh] md:h-full flex flex-col overflow-hidden relative border-b md:border-b-0 md:border-r border-white/5 bg-white/[0.01] p-6 md:p-12 mt-16 md:mt-0">
                    <div className="mb-8 pr-12">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-1 md:w-16 md:h-1.5 bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.6)]"></div>
@@ -432,7 +432,7 @@ export default function Goals() {
                 </div>
                 
                 {/* Panel 2: Tasks List */}
-                <div className="flex-[1.2] h-full flex flex-col relative overflow-hidden bg-black/60 backdrop-blur-4xl p-8 md:p-12">
+                <div className="flex-[1.2] h-[50vh] md:h-full flex flex-col relative overflow-hidden bg-black/60 backdrop-blur-xl p-6 md:p-12">
                    <AnimatePresence mode="wait">
                     {!selectedCycle ? (
                       <motion.div 

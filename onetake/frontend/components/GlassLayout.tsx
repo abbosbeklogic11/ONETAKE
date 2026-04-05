@@ -95,12 +95,19 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
       });
       if (res.ok) {
         const updatedUser = await res.json();
-        // Update local authStore state via fetchUserData or manual set
-        useAuthStore.setState({ user: { ...user, ...updatedUser } });
+        // Update local authStore state
+        if (updatedUser && updatedUser.id) {
+           useAuthStore.setState({ user: { ...user, ...updatedUser } });
+        }
         setActiveProfileTab('info');
+        alert('Profil muvaffaqiyatli yangilandi!');
+      } else {
+        const errorData = await res.json();
+        alert(`Xatolik: ${errorData.message || 'Profilni yangilab bo\'lmadi'}`);
       }
     } catch (e) {
       console.error(e);
+      alert('Tarmoq xatosi yoki server bilan muammo yuzaga keldi.');
     } finally {
       setIsUpdatingProfile(false);
     }
@@ -178,7 +185,14 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
               onClick={() => { setIsProfileOpen(true); setActiveProfileTab('info'); }}
               className="w-10 h-10 md:w-12 md:h-12 rounded-2xl border-2 border-blue-400/50 p-0.5 bg-gradient-to-b from-blue-400 to-indigo-600 shadow-2xl cursor-pointer"
             >
-               <img src={user?.avatarUrl || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"} alt="avatar" className="w-full h-full object-cover rounded-[14px]" />
+               <img 
+                 src={user?.avatarUrl ? user.avatarUrl : "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"} 
+                 alt="avatar" 
+                 className="w-full h-full object-cover rounded-[14px]" 
+                 onError={(e) => {
+                   (e.target as HTMLImageElement).src = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+                 }}
+               />
             </motion.button>
           </div>
         </header>
@@ -237,7 +251,14 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
                       <motion.div key="info" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="flex flex-col items-center">
                         <div className="relative group">
                           <div className="w-32 h-32 md:w-40 md:h-40 rounded-[40px] border-4 border-blue-500/30 p-1.5 bg-white/5 shadow-2xl mb-6 transform rotate-3 transition-transform group-hover:rotate-0 duration-500">
-                             <img src={user?.avatarUrl || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"} alt="avatar" className="w-full h-full object-cover rounded-[32px]" />
+                             <img 
+                               src={user?.avatarUrl ? user.avatarUrl : "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"} 
+                               alt="avatar" 
+                               className="w-full h-full object-cover rounded-[32px]" 
+                               onError={(e) => {
+                                 (e.target as HTMLImageElement).src = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+                               }}
+                             />
                           </div>
                           <div className="absolute -bottom-2 -right-2 bg-blue-500 text-white p-3 rounded-2xl shadow-xl border border-white/20 transform -rotate-6">
                              <Sparkles size={20} />
