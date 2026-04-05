@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { Home, CheckSquare, Target, BarChart2, BookOpen, Info, LogOut, X, Save, Sparkles } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_URL } from '../store/api';
 
 export function GlassLayout({ children }: { children: React.ReactNode }) {
   const { user, token, logout } = useAuthStore();
@@ -28,7 +29,7 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (isProfileOpen && token) {
       // Fetch Note
-      fetch('http://localhost:5000/api/notes/my', {
+      fetch(`${API_URL}/notes/my`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(res => res.json())
@@ -41,7 +42,7 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
       .catch(console.error);
 
       // Fetch Ranking
-      fetch('http://localhost:5000/api/auth/ranking')
+      fetch(`${API_URL}/auth/ranking`)
       .then(res => res.json())
       .then(data => setRanking(Array.isArray(data) ? data : []))
       .catch(console.error);
@@ -59,7 +60,7 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
     const timer = setTimeout(async () => {
       setSaveStatus('saving');
       try {
-        await fetch('http://localhost:5000/api/notes/my', {
+        await fetch(`${API_URL}/notes/my`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({ content: noteContent })
@@ -87,7 +88,7 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/profile', {
+      const res = await fetch(`${API_URL}/auth/profile`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
         body: formData

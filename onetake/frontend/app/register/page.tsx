@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Upload } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
+import { API_URL } from '../../store/api';
 
 export default function Register() {
   const [formData, setFormData] = useState({ username: '', email: '', password: '' });
@@ -32,7 +33,7 @@ export default function Register() {
       data.append('password', formData.password);
       if (avatar) data.append('avatar', avatar);
 
-      const res = await fetch('http://localhost:5000/api/auth/register', {
+      const res = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         // FormData sends boundary automatically, don't set Content-Type manually
         body: data

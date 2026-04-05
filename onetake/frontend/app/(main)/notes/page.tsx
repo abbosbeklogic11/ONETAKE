@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, Clock, BookOpen, Sparkles } from 'lucide-react';
 import { useAuthStore } from '../../../store/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_URL } from '../../../store/api';
 
 export default function Notes() {
   const [content, setContent] = useState('');
@@ -12,7 +13,7 @@ export default function Notes() {
 
   useEffect(() => {
     if (token) {
-      fetch('http://localhost:5000/api/notes/my', {
+      fetch(`${API_URL}/notes/my`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(res => res.json())
@@ -32,7 +33,7 @@ export default function Notes() {
     const timer = setTimeout(async () => {
       setSaveStatus('saving');
       try {
-        await fetch('http://localhost:5000/api/notes/my', {
+        await fetch(`${API_URL}/notes/my`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({ content })

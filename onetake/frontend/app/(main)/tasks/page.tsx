@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle2, Circle, Clock, PlusCircle, X, CheckSquare, Target, Calendar, ArrowRight } from 'lucide-react';
 import { useAuthStore } from '../../../store/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_URL } from '../../../store/api';
 
 export default function Tasks() {
   const [tasks, setTasks] = useState<any[]>([]);
@@ -19,7 +20,7 @@ export default function Tasks() {
   const fetchTasks = async () => {
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:5000/api/tasks', {
+      const res = await fetch(`${API_URL}/tasks`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
@@ -35,7 +36,7 @@ export default function Tasks() {
     e.preventDefault();
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:5000/api/tasks', {
+      const res = await fetch(`${API_URL}/tasks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(formData)
@@ -53,7 +54,7 @@ export default function Tasks() {
   const toggleTask = async (id: string) => {
     if (!token) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${id}/toggle`, {
+      const res = await fetch(`${API_URL}/tasks/${id}/toggle`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` }
       });

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Target, PlusCircle, X, ChevronRight, Calendar as CalIcon, CheckCircle, CheckSquare, ArrowRight, Flame, Clock } from 'lucide-react';
 import { useAuthStore } from '../../../store/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_URL } from '../../../store/api';
 
 export default function Goals() {
   const [goals, setGoals] = useState<any[]>([]);
@@ -27,7 +28,7 @@ export default function Goals() {
   const fetchGoals = async () => {
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:5000/api/goals', {
+      const res = await fetch(`${API_URL}/goals`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
@@ -54,7 +55,7 @@ export default function Goals() {
     e.preventDefault();
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:5000/api/goals', {
+      const res = await fetch(`${API_URL}/goals`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(formData)
@@ -73,7 +74,7 @@ export default function Goals() {
     e.preventDefault();
     if (!token || !selectedGoal) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/goals/${selectedGoal.id}/five-day-cycles`, {
+      const res = await fetch(`${API_URL}/goals/${selectedGoal.id}/five-day-cycles`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(cycleData)
@@ -92,7 +93,7 @@ export default function Goals() {
     e.preventDefault();
     if (!token || !selectedGoal || !selectedCycle) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks`, {
+      const res = await fetch(`${API_URL}/tasks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -114,7 +115,7 @@ export default function Goals() {
   const handleToggleTask = async (taskId: string) => {
     if (!token) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}/toggle`, {
+      const res = await fetch(`${API_URL}/tasks/${taskId}/toggle`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` }
       });

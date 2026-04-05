@@ -28,7 +28,7 @@ export class AuthController {
   async register(@Body() createDto: any, @UploadedFile() file?: any) {
     let avatarUrl = null;
     if (file) {
-      avatarUrl = `http://localhost:5000/uploads/${file.filename}`;
+      avatarUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/uploads/${file.filename}`;
     }
     return this.authService.register(createDto.username, createDto.email, createDto.password, avatarUrl);
   }
@@ -63,7 +63,7 @@ export class AuthController {
   async updateProfile(@Req() req, @Body() updateDto: any, @UploadedFile() file?: any) {
     const updateData: any = { ...updateDto };
     if (file) {
-      updateData.avatarUrl = `http://localhost:5000/uploads/${file.filename}`;
+      updateData.avatarUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/uploads/${file.filename}`;
     }
     return this.authService.updateProfile(req.user.id, updateData);
   }

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { API_URL } from './api';
 
 interface AuthState {
   user: any | null;
@@ -22,7 +23,7 @@ export const useAuthStore = create<AuthState>()(
         const { token } = get();
         if (!token) return;
         try {
-          const res = await fetch('http://localhost:5000/api/auth/me', {
+          const res = await fetch(`${API_URL}/auth/me`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           if (res.ok) {

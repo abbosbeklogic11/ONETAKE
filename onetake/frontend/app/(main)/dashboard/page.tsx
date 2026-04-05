@@ -5,6 +5,7 @@ import { Target, CheckSquare, Coins, ArrowRight, Activity, Zap } from 'lucide-re
 import { useAuthStore } from '../../../store/authStore';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { API_URL } from '../../../store/api';
 
 export default function Dashboard() {
   const { user, token, fetchUserData } = useAuthStore();
@@ -21,14 +22,14 @@ export default function Dashboard() {
 
   const fetchTasks = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/tasks', { headers: { Authorization: `Bearer ${token}` }});
+      const res = await fetch(`${API_URL}/tasks`, { headers: { Authorization: `Bearer ${token}` }});
       if (res.ok) setTasks(await res.json());
     } catch(e) {}
   };
 
   const fetchGoals = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/goals', { headers: { Authorization: `Bearer ${token}` }});
+      const res = await fetch(`${API_URL}/goals`, { headers: { Authorization: `Bearer ${token}` }});
       if (res.ok) setGoals(await res.json());
     } catch(e) {}
   };
