@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: #ffffff;
+  --background: #09090b;
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+@layer base {
+  html {
+    @apply antialiased scroll-smooth;
+  }
+}
+
+/* Background Animated Gradient Mesh */
+.bg-mesh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background: 
+    radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.15), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%),
+    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.1), transparent 30%);
+  background-size: 200% 200%;
+  animation: bgMeshing 15s ease infinite alternate;
+}
+
+@keyframes bgMeshing {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 50% 0%;
+  }
+}
+
+@layer utilities {
+  .liquid-glass-3d {
+    @apply bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.37)] relative overflow-hidden;
+  }
+  
+  /* Inner shine effect simulating glass thickness */
+  .liquid-glass-3d::before {
+    content: '';
+    @apply absolute inset-0 rounded-[inherit] pointer-events-none;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -1px 1px rgba(255, 255, 255, 0.05);
+  }
+
+  .glass {
+    @apply liquid-glass-3d;
+  }
+  
+  .glass-card {
+    @apply liquid-glass-3d rounded-3xl p-6 transition-all duration-500 hover:bg-white/[0.05] hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(0,0,0,0.5)];
+  }
+  
+  .glass-input {
+    @apply bg-white/[0.05] backdrop-blur-xl border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white/[0.08] transition-all duration-300;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .glass-button {
+    @apply relative overflow-hidden rounded-2xl px-6 py-4 font-bold text-white transition-all duration-300 active:scale-95 flex items-center justify-center gap-2;
+    background: linear-gradient(135deg, rgba(59,130,246,0.8) 0%, rgba(139,92,246,0.8) 100%);
+    box-shadow: 0 4px 15px rgba(59,130,246,0.3), inset 0 1px 1px rgba(255,255,255,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .glass-button:hover {
+    background: linear-gradient(135deg, rgba(59,130,246,0.9) 0%, rgba(139,92,246,0.9) 100%);
+    box-shadow: 0 8px 25px rgba(59,130,246,0.4), inset 0 1px 1px rgba(255,255,255,0.4);
+    transform: translateY(-2px);
+  }
+
+  /* Shimmer effect for buttons */
+  .glass-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: skewX(-20deg);
+    animation: shimmer 5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { left: -100%; }
+    20% { left: 200%; }
+    100% { left: 200%; }
+  }
+
+  /* Custom Scrollbar for Glass */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* App-like elastic scroll */
+  .elastic-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Screen transitions */
+  .page-transition-enter {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .page-transition-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 400ms, transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
