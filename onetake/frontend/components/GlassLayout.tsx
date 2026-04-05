@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { Home, CheckSquare, Target, BarChart2, BookOpen, Info, LogOut, X, Save, Sparkles } from 'lucide-react';
+import { Home, CheckSquare, Target, BarChart2, BookOpen, Info, LogOut, X, Save, Sparkles, Moon, Sun } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { API_URL } from '../store/api';
 
 export function GlassLayout({ children }: { children: React.ReactNode }) {
-  const { user, token, logout } = useAuthStore();
+  const { user, token, logout, fetchUserData, theme, setTheme } = useAuthStore();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -24,6 +24,19 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
   const [editEmail, setEditEmail] = useState(user?.email || '');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+
+  // Theme and Initial Sync
+  useEffect(() => {
+    if (token) fetchUserData();
+  }, [token]);
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+  }, [theme]);
 
   // Fetch note when profile opens
   useEffect(() => {
@@ -143,7 +156,7 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-xl shadow-[0_0_20px_rgba(59,130,246,0.6)] border border-blue-400/50 transform rotate-12">
             O
           </div>
-          <span className="font-bold text-2xl tracking-tight text-white drop-shadow-md">ONETAKE</span>
+          <span className="font-bold text-2xl tracking-tight text-[var(--foreground)] drop-shadow-md">ONETAKE</span>
         </div>
         
         <nav className="flex-1 space-y-3">
@@ -170,6 +183,15 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
           </div>
           
           <div className="ml-auto flex items-center gap-3 md:gap-6">
+            <motion.button 
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 text-[var(--foreground)] shadow-xl transition-all"
+            >
+              {theme === 'dark' ? <Moon size={20} /> : <Sun size={20} className="text-yellow-500" />}
+            </motion.button>
+
             <motion.div 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

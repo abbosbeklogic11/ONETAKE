@@ -5,6 +5,21 @@
 :root {
   --foreground: #ffffff;
   --background: #09090b;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text-muted: rgba(255, 255, 255, 0.4);
+  --mesh-opacity: 0.15;
+  --input-bg: rgba(255, 255, 255, 0.05);
+}
+
+.light {
+  --foreground: #09090b;
+  --background: #f8fafc;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(0, 0, 0, 0.05);
+  --text-muted: rgba(0, 0, 0, 0.5);
+  --mesh-opacity: 0.05;
+  --input-bg: rgba(0, 0, 0, 0.03);
 }
 
 body {
@@ -31,10 +46,11 @@ body {
   width: 100vw;
   height: 100vh;
   z-index: -1;
+  opacity: var(--mesh-opacity);
   background: 
-    radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.15), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%),
-    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.1), transparent 30%);
+    radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.5), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.5), transparent 25%),
+    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.4), transparent 30%);
   background-size: 200% 200%;
   animation: bgMeshing 15s ease infinite alternate;
 }
@@ -53,7 +69,7 @@ body {
 
 @layer utilities {
   .liquid-glass-3d {
-    @apply bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.37)] relative overflow-hidden;
+    @apply bg-[var(--card-bg)] backdrop-blur-2xl border border-[var(--card-border)] shadow-[0_8px_32px_rgba(0,0,0,0.37)] relative overflow-hidden;
   }
   
   /* Inner shine effect simulating glass thickness */
@@ -72,7 +88,7 @@ body {
   }
   
   .glass-input {
-    @apply bg-white/[0.05] backdrop-blur-xl border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white/[0.08] transition-all duration-300;
+    @apply bg-[var(--input-bg)] backdrop-blur-xl border border-[var(--card-border)] rounded-2xl px-5 py-4 text-[var(--foreground)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white/[0.08] transition-all duration-300;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
   }
   

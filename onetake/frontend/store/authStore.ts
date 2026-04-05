@@ -6,9 +6,11 @@ interface AuthState {
   user: any | null;
   token: string | null;
   isAuthenticated: boolean;
+  theme: 'dark' | 'light';
   login: (user: any, token: string) => void;
   logout: () => void;
   fetchUserData: () => Promise<void>;
+  setTheme: (theme: 'dark' | 'light') => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -17,8 +19,10 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
+      theme: 'dark',
       login: (user, token) => set({ user, token, isAuthenticated: true }),
       logout: () => set({ user: null, token: null, isAuthenticated: false }),
+      setTheme: (theme) => set({ theme }),
       fetchUserData: async () => {
         const { token } = get();
         if (!token) return;
