@@ -165,8 +165,8 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
         {/* Mobile Premium Header */}
         <header className="h-16 md:h-20 flex items-center justify-between px-4 md:px-8 z-30 sticky top-0 transition-all">
           <div className="md:hidden flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-sm shadow-lg border border-white/10">O</div>
-            <span className="font-bold text-lg tracking-tight text-white">ONETAKE</span>
+            <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center font-bold text-sm border border-white/5">O</div>
+            <span className="font-black text-lg tracking-tight text-white/90">ONETAKE</span>
           </div>
           
           <div className="ml-auto flex items-center gap-3 md:gap-6">
@@ -216,7 +216,7 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={(e) => { if (e.target === e.currentTarget) setIsProfileOpen(false); }}
-              className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl cursor-pointer"
+              className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md cursor-pointer"
             >
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -406,7 +406,7 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile App-like Bottom Navigation */}
         <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 md:h-20 z-50 flex items-center justify-around px-4 pb-safe">
-           <div className="absolute inset-0 bg-black/40 backdrop-blur-2xl border-t border-white/5 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]" />
+           <div className="absolute inset-0 bg-black/60 backdrop-blur-lg border-t border-white/5 shadow-2xl" />
            {menuItems.map((item) => {
              const isActive = pathname === item.href;
              return (

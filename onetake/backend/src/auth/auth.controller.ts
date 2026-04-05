@@ -23,7 +23,13 @@ export class AuthController {
         const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
         cb(null, `${randomName}${extname(file.originalname)}`);
       }
-    })
+    }),
+    fileFilter: (req, file, cb) => {
+      if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/)) {
+        return cb(new Error('Faqat rasm fayllari ruxsat etiladi!'), false);
+      }
+      cb(null, true);
+    }
   }))
   async register(@Body() createDto: any, @UploadedFile() file?: any) {
     let avatarUrl = null;
@@ -58,7 +64,13 @@ export class AuthController {
         const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
         cb(null, `${randomName}${extname(file.originalname)}`);
       }
-    })
+    }),
+    fileFilter: (req, file, cb) => {
+      if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/)) {
+        return cb(new Error('Faqat rasm fayllari ruxsat etiladi!'), false);
+      }
+      cb(null, true);
+    }
   }))
   async updateProfile(@Req() req, @Body() updateDto: any, @UploadedFile() file?: any) {
     const updateData: any = { ...updateDto };

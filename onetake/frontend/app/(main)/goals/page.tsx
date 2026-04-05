@@ -14,6 +14,7 @@ export default function Goals() {
 
   // Detailed view states
   const [selectedGoal, setSelectedGoal] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<'cycles' | 'tasks'>('cycles');
   const [isAddingCycle, setIsAddingCycle] = useState(false);
   const [cycleData, setCycleData] = useState({ description: '', startDate: '', endDate: '' });
   
@@ -134,11 +135,6 @@ export default function Goals() {
     const diffTime = deadline.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays > 0 ? diffDays : 0;
-  };
-
-  const itemVariants = {
-    hidden: { y: 8, opacity: 0 },
-    visible: { y: 0, opacity: 1 }
   };
 
   return (
@@ -297,7 +293,7 @@ export default function Goals() {
         )}
       </AnimatePresence>
 
-      {/* Hierarchical Goal View Modal - Premium Overhaul */}
+      {/* Hierarchical Goal View Modal */}
        <AnimatePresence>
         {selectedGoal && (
           <motion.div 
@@ -307,21 +303,48 @@ export default function Goals() {
             className="fixed inset-0 z-[1000] flex items-center justify-center bg-black overflow-hidden p-0"
           >
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className="w-full h-full flex flex-col md:flex-row gap-0 overflow-hidden relative"
+              exit={{ opacity: 0, y: 30 }}
+              className="w-full h-full flex flex-col md:flex-row gap-0 overflow-hidden relative bg-black/95"
             >
+                {/* Mobile Header with X and Tabs */}
+                <div className="md:hidden flex flex-col pt-6 px-6 pb-2 space-y-4 border-b border-white/5 bg-black/40 backdrop-blur-lg sticky top-0 z-[1200]">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-black tracking-tight">{selectedGoal?.title}</h3>
+                    <button 
+                      onClick={() => { setSelectedGoal(null); setSelectedCycle(null); }} 
+                      className="w-10 h-10 flex items-center justify-center bg-white/10 rounded-full text-white/50"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+                  <div className="flex p-1 bg-white/5 rounded-xl border border-white/5">
+                    <button 
+                      onClick={() => setActiveTab('cycles')}
+                      className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${activeTab === 'cycles' ? 'bg-blue-500 text-white shadow-lg' : 'text-white/30'}`}
+                    >
+                      Bosqichlar
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('tasks')}
+                      className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${activeTab === 'tasks' ? 'bg-blue-500 text-white shadow-lg' : 'text-white/30'}`}
+                    >
+                      Vazifalar
+                    </button>
+                  </div>
+                </div>
+
+                 {/* Desktop X Button */}
                  <button 
                   onClick={() => { setSelectedGoal(null); setSelectedCycle(null); }} 
-                  className="absolute top-4 right-4 md:top-10 md:right-10 z-[1100] w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-white/10 backdrop-blur-3xl border border-white/10 rounded-full text-white/50 hover:text-white hover:bg-white/20 transition-all shadow-3xl active:scale-90"
+                  className="hidden md:flex absolute top-10 right-10 z-[1100] w-16 h-16 items-center justify-center bg-white/10 backdrop-blur-3xl border border-white/10 rounded-full text-white/50 hover:text-white hover:bg-white/20 transition-all shadow-3xl active:scale-90"
                 >
-                  <X size={24} className="md:w-8 md:h-8" />
+                  <X size={32} />
                 </button>
 
                  {/* Panel 1: Cycles List */}
-                <div className="flex-1 h-[50vh] md:h-full flex flex-col overflow-hidden relative border-b md:border-b-0 md:border-r border-white/5 bg-white/[0.01] p-6 md:p-12 mt-16 md:mt-0">
+                <div className={`flex-1 h-full md:flex flex-col overflow-hidden relative border-r border-white/5 bg-white/[0.01] p-6 md:p-12 ${activeTab !== 'cycles' && 'hidden md:flex'}`}>
                    <div className="mb-8 pr-12">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-1 md:w-16 md:h-1.5 bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.6)]"></div>
@@ -350,7 +373,7 @@ export default function Goals() {
                           initial={{ opacity: 0, y: 5 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: cidx * 0.03, duration: 0.3 }}
-                          onClick={() => setSelectedCycle(cycle)}
+                          onClick={() => { setSelectedCycle(cycle); setActiveTab('tasks'); }}
                           className={`p-5 rounded-[24px] border cursor-pointer transition-all ${selectedCycle?.id === cycle.id ? 'bg-blue-600/20 border-blue-500/50 shadow-[0_0_30px_rgba(59,130,246,0.15)] scale-[1.01]' : 'bg-white/5 border-white/5 hover:bg-white/[0.08] hover:border-white/10'}`}
                         >
                            <div className="flex justify-between items-center mb-3">
@@ -384,55 +407,56 @@ export default function Goals() {
                         </div>
                       )}
                       
-                       {/* Focused Overlay for Adding Cycle */}
-                      <AnimatePresence>
-                        {isAddingCycle && (
+                    <AnimatePresence>
+                      {isAddingCycle && (
+                        <motion.div 
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                          onClick={() => setIsAddingCycle(false)}
+                        >
                           <motion.div 
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-[1010] flex items-center justify-center p-4 bg-black/80 backdrop-blur-2xl"
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-[#0a0a0a] border border-white/10 p-6 md:p-10 rounded-[32px] w-full max-w-lg shadow-2xl relative"
                           >
-                             <motion.form 
-                              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                              animate={{ opacity: 1, scale: 1, y: 0 }}
-                              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                              onSubmit={handleAddCycle} 
-                              className="w-full max-w-lg p-10 rounded-[40px] bg-white/[0.05] border border-blue-500/30 space-y-8 shadow-[0_0_100px_rgba(59,130,246,0.1)]"
-                            >
-                               <div className="flex justify-between items-center">
-                                  <h3 className="text-3xl font-black text-white tracking-tight">Yangi Bosqich</h3>
+                             <form onSubmit={handleAddCycle} className="space-y-6">
+                               <div className="flex justify-between items-center mb-2">
+                                  <h3 className="text-2xl font-black text-white tracking-tight">Yangi Bosqich</h3>
                                   <button type="button" onClick={() => setIsAddingCycle(false)} className="text-white/30 hover:text-white"><X size={24} /></button>
                                </div>
 
                                <div className="space-y-2">
                                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-2">Qadam nomi va vazifasi</label>
-                                  <input type="text" placeholder="Masalan: Kursning 1-modulini yakunlash" required className="glass-input w-full text-lg h-16 px-6" value={cycleData.description} onChange={e => setCycleData({...cycleData, description: e.target.value})} />
+                                  <input type="text" placeholder="Masalan: Kursning 1-modulini yakunlash" required className="glass-input w-full text-lg h-14 md:h-16 px-6" value={cycleData.description} onChange={e => setCycleData({...cycleData, description: e.target.value})} />
                                </div>
-                               <div className="flex gap-6">
+                               <div className="flex flex-col md:flex-row gap-4 md:gap-6">
                                  <div className="flex-1 space-y-2">
                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-2">Boshlanish</label>
-                                   <input type="date" required className="glass-input w-full h-16 px-6" value={cycleData.startDate} onChange={e => setCycleData({...cycleData, startDate: e.target.value})} />
+                                   <input type="date" required className="glass-input w-full h-14 md:h-16 px-6" value={cycleData.startDate} onChange={e => setCycleData({...cycleData, startDate: e.target.value})} />
                                  </div>
                                  <div className="flex-1 space-y-2">
                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-2">Tugash</label>
-                                   <input type="date" required className="glass-input w-full h-16 px-6" value={cycleData.endDate} onChange={e => setCycleData({...cycleData, endDate: e.target.value})} />
+                                   <input type="date" required className="glass-input w-full h-14 md:h-16 px-6" value={cycleData.endDate} onChange={e => setCycleData({...cycleData, endDate: e.target.value})} />
                                  </div>
                                </div>
                                <div className="flex gap-4 pt-4">
-                                 <button type="button" onClick={() => setIsAddingCycle(false)} className="flex-1 py-5 rounded-2xl bg-white/5 hover:bg-white/10 font-black uppercase tracking-widest transition-all">Bekor qilish</button>
-                                 <button type="submit" className="flex-[2] py-5 rounded-2xl bg-blue-500 hover:bg-blue-600 text-white font-black uppercase tracking-widest shadow-xl shadow-blue-500/20 transition-all">Bosqichni Saqlash</button>
+                                 <button type="button" onClick={() => setIsAddingCycle(false)} className="flex-1 py-4 md:py-5 rounded-2xl bg-white/5 hover:bg-white/10 font-black uppercase tracking-widest transition-all text-xs">Bekor qilish</button>
+                                 <button type="submit" className="flex-[2] py-4 md:py-5 rounded-2xl bg-blue-500 hover:bg-blue-600 text-white font-black uppercase tracking-widest shadow-xl shadow-blue-500/20 transition-all text-xs">Saqlash</button>
                                </div>
-                            </motion.form>
+                             </form>
                           </motion.div>
-                        )}
-                      </AnimatePresence>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                    </div>
                 </div>
                 
                 {/* Panel 2: Tasks List */}
-                <div className="flex-[1.2] h-[50vh] md:h-full flex flex-col relative overflow-hidden bg-black/60 backdrop-blur-xl p-6 md:p-12">
+                <div className={`flex-[1.2] h-full md:flex flex-col relative overflow-hidden bg-black/40 backdrop-blur-lg p-6 md:p-12 ${activeTab !== 'tasks' && 'hidden md:flex'}`}>
                    <AnimatePresence mode="wait">
                     {!selectedCycle ? (
                       <motion.div 
