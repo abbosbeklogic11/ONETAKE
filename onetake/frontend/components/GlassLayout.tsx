@@ -24,19 +24,22 @@ export function GlassLayout({ children }: { children: React.ReactNode }) {
   const [editEmail, setEditEmail] = useState(user?.email || '');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Theme and Initial Sync
+  // Sync and Mount
   useEffect(() => {
+    setMounted(true);
     if (token) fetchUserData();
-  }, [token]);
+  }, [token, fetchUserData]);
 
   useEffect(() => {
+    if (!mounted) return;
     if (theme === 'light') {
       document.documentElement.classList.add('light');
     } else {
       document.documentElement.classList.remove('light');
     }
-  }, [theme]);
+  }, [theme, mounted]);
 
   // Fetch note when profile opens
   useEffect(() => {

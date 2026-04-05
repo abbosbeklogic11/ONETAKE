@@ -40,7 +40,8 @@ export const useAuthStore = create<AuthState>()(
       }
     }),
     {
-      name: 'auth-storage',
+      name: 'auth-storage-v2', // Changed name to force reset or just use version
+      version: 1,
     }
   )
 );
